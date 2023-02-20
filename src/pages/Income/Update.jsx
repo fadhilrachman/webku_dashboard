@@ -1,49 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../../components/Card";
 import BaseInput from "../../components/BaseInput";
 import BaseButton from "../../components/BaseButton";
 import TextArea from "../../components/BaseInput/TextArea";
 import Select from "../../components/BaseInput/Select";
 import RupiahFormat from "../../components/BaseInput/RupiahFormat";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Formik, Form, Field, useFormik } from "formik";
-import { useDispatch } from "react-redux";
-import { createDataExpense } from "./redux/ExpenseReducer";
+import { useDispatch, useSelector } from "react-redux";
+import { updateDataIncome, getDataIncomeById } from "./redux/IncomeReducer";
 import * as Yup from "yup";
-const Create = () => {
+const Update = () => {
   const disptach = useDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const income = useSelector((state) => state.income);
+  const dataIncome = income?.data.result;
+  console.log(dataIncome);
+  useEffect(() => {
+    disptach(getDataIncomeById(id));
+  }, [disptach, id]);
+
+  useEffect(() => {
+    // if (dataIncome != undefined) {
+    formik.setValues({
+      tanggal: dataIncome?.tanggal,
+      kategori: dataIncome?.kategori,
+      total_pemasukan: dataIncome?.total_pemasukan,
+      deskripsi: dataIncome?.deskripsi,
+    });
+    // }
+  }, [dataIncome]);
+
   const formik = useFormik({
     initialValues: {
       tanggal: "",
       kategori: "",
-      total_pengeluaran: "",
+      total_pemasukan: "",
       deskripsi: "",
     },
-
     validationSchema: Yup.object({
       tanggal: Yup.string().required("tanggal harus diisi"),
       kategori: Yup.string().required("kategori harus diisi"),
-      total_pengeluaran: Yup.string().required("total pengeluaran harus diisi"),
+      total_pemasukan: Yup.string().required("total pengeluaran harus diisi"),
     }),
     onSubmit: (values) => {
-      disptach(createDataExpense(values));
-      navigate("/expense");
+      disptach(updateDataIncome({ values, id }));
+      console.log(values);
+      navigate("/income");
     },
     errors: {
       tanggal: "",
       kategori: "",
-      total_pengeluaran: "",
+      total_pemasukan: "",
       deskripsi: "",
     },
   });
+
   if (formik.errors.tanggal) {
     console.log(formik.errors);
   }
   console.log(formik.values);
   return (
     <div>
-      <h1 className="text-black text-3xl">Create Data Expense</h1>
+      <h1 className="text-black text-3xl">Update Data Income</h1>
       <Card className="mt-4 w-full">
         <form onSubmit={formik.handleSubmit}>
           <div className="flex flex-col mt-5">
@@ -82,23 +102,22 @@ const Create = () => {
             )}
           </div>
           <div className="flex flex-col mt-5">
-            <label htmlFor="">Total Pengeluaran</label>
+            <label htmlFor="">Total Pemasukan</label>
             <RupiahFormat
               classname="mt-3"
               placeholder="2000...."
-              name="total_pengeluaran"
+              name="total_pemasukan"
               onChange={formik.handleChange}
-              value={formik.values.total_pengeluaran}
+              value={formik.values.total_pemasukan}
               onBlur={formik.handleBlur}
               isInvalid={
-                formik.errors.total_pengeluaran &&
-                formik.touched.total_pengeluaran
+                formik.errors.total_pemasukan && formik.touched.total_pemasukan
               }
             />
-            {formik.errors.total_pengeluaran &&
-              formik.touched.total_pengeluaran && (
+            {formik.errors.total_pemasukan &&
+              formik.touched.total_pemasukan && (
                 <small className="text-red-500">
-                  {formik.errors.total_pengeluaran}
+                  {formik.errors.total_pemasukan}
                 </small>
               )}
           </div>
@@ -126,4 +145,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Update;

@@ -1,8 +1,9 @@
-import "bootstrap-icons/font/bootstrap-icons.css";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import RoutesPage from "./routes/RoutesPage";
 import { store } from "./Store";
+import "bootstrap-icons/font/bootstrap-icons.css";
+import "animate.css";
 function App() {
   return (
     <BrowserRouter>

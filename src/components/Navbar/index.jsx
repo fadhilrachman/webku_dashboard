@@ -4,7 +4,7 @@ const index = () => {
     <div className="flex px-6   border justify-between items-center">
       <div className=" h-full pr-16 py-3">
         <h1 className="text-xl hover:underline hover:cursor-pointer">
-          padil dahboard
+          padil dashboard
         </h1>
       </div>
       <div>

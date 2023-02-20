@@ -8,7 +8,7 @@ import RupiahFormat from "../../components/BaseInput/RupiahFormat";
 import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, useFormik } from "formik";
 import { useDispatch } from "react-redux";
-import { createDataExpense } from "./redux/ExpenseReducer";
+import { createDataIncome } from "./redux/IncomeReducer";
 import * as Yup from "yup";
 const Create = () => {
   const disptach = useDispatch();
@@ -17,23 +17,23 @@ const Create = () => {
     initialValues: {
       tanggal: "",
       kategori: "",
-      total_pengeluaran: "",
+      total_pemasukan: "",
       deskripsi: "",
     },
 
     validationSchema: Yup.object({
       tanggal: Yup.string().required("tanggal harus diisi"),
       kategori: Yup.string().required("kategori harus diisi"),
-      total_pengeluaran: Yup.string().required("total pengeluaran harus diisi"),
+      total_pemasukan: Yup.string().required("total pemasukan harus diisi"),
     }),
     onSubmit: (values) => {
-      disptach(createDataExpense(values));
-      navigate("/expense");
+      disptach(createDataIncome(values));
+      navigate("/income");
     },
     errors: {
       tanggal: "",
       kategori: "",
-      total_pengeluaran: "",
+      total_pemasukan: "",
       deskripsi: "",
     },
   });
@@ -43,7 +43,7 @@ const Create = () => {
   console.log(formik.values);
   return (
     <div>
-      <h1 className="text-black text-3xl">Create Data Expense</h1>
+      <h1 className="text-black text-3xl">Create Data Income</h1>
       <Card className="mt-4 w-full">
         <form onSubmit={formik.handleSubmit}>
           <div className="flex flex-col mt-5">
@@ -82,23 +82,22 @@ const Create = () => {
             )}
           </div>
           <div className="flex flex-col mt-5">
-            <label htmlFor="">Total Pengeluaran</label>
+            <label htmlFor="">Total Pemasukan</label>
             <RupiahFormat
               classname="mt-3"
               placeholder="2000...."
-              name="total_pengeluaran"
+              name="total_pemasukan"
               onChange={formik.handleChange}
-              value={formik.values.total_pengeluaran}
+              value={formik.values.total_pemasukan}
               onBlur={formik.handleBlur}
               isInvalid={
-                formik.errors.total_pengeluaran &&
-                formik.touched.total_pengeluaran
+                formik.errors.total_pemasukan && formik.touched.total_pemasukan
               }
             />
-            {formik.errors.total_pengeluaran &&
-              formik.touched.total_pengeluaran && (
+            {formik.errors.total_pemasukan &&
+              formik.touched.total_pemasukan && (
                 <small className="text-red-500">
-                  {formik.errors.total_pengeluaran}
+                  {formik.errors.total_pemasukan}
                 </small>
               )}
           </div>
